@@ -21,12 +21,7 @@ publishing {
             groupId project.ext.groupId
             artifactId project.ext.bundle
             version project.ext.sdkVersion
-            artifact("libs/print-release.aar") {
-                classifier "minapi16"
-            }
-            artifact("libs/print-release.aar") {
-                classifier "minapi21"
-            }
+            artifact("libs/print-release.aar")
         }
     }
 }
