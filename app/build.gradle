@@ -18,15 +18,22 @@ android {
 publishing {
     publications {
         group "com.test.print"
-        version = '1.0.13'
+        version = "1.0.14"
+
         minapi16(MavenPublication) {
-            artifactId = 'minapi16'
-            artifact("libs/print-release.aar")
+            artifactId "minapi16"
+            artifact("libs/print-release.aar") {
+                classifier "basic"
+                extension "aar"
+            }
         }
 
         minapi21(MavenPublication) {
-            artifactId = 'minapi21'
-            artifact("libs/print-release.aar")
+            artifactId "minapi21"
+            artifact("libs/print-release.aar") {
+                classifier "basic"
+                extension "aar"
+            }
         }
     }
 }
