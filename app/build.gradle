@@ -13,44 +13,20 @@ android {
         versionName "1.0"
     }
 
-    flavorDimensions "api"
-
-    productFlavors {
-        minapi16 {
-            dimension "api"
-            minSdkVersion 16
-        }
-        minapi21 {
-            dimension "api"
-            minSdkVersion 21
-        }
-        androidTV {
-            dimension "api"
-            minSdkVersion 21
-        }
-        fireTV {
-            dimension "api"
-            minSdkVersion 21
-        }
-    }
-
 }
 
 publishing {
     publications {
-        Print(MavenPublication) {
-            artifact("libs/print-release.aar") {
-                groupId "com.test.print"
-                artifactId "basic"
-                classifier "minapi16"
-                version "1.0.12"
-            }
-            artifact("libs/print-release.aar") {
-                groupId "com.test.print"
-                artifactId "basic"
-                classifier "minapi21"
-                version "1.0.12"
-            }
+        group "com.test.print"
+        version = '1.0.13'
+        minapi16(MavenPublication) {
+            artifactId = 'minapi16'
+            artifact("libs/print-release.aar")
+        }
+
+        minapi21(MavenPublication) {
+            artifactId = 'minapi21'
+            artifact("libs/print-release.aar")
         }
     }
 }
