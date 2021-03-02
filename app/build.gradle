@@ -17,7 +17,13 @@ android {
 
 publishing {
     publications {
-        Print(MavenPublication) {
+        minapi16(MavenPublication) {
+            groupId project.ext.groupId
+            artifactId project.ext.bundle
+            version project.ext.sdkVersion
+            artifact("libs/print-release.aar")
+        }
+        minapi21(MavenPublication) {
             groupId project.ext.groupId
             artifactId project.ext.bundle
             version project.ext.sdkVersion
