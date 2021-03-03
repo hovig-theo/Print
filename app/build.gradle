@@ -23,7 +23,6 @@ android {
 dependencies {
     basicImplementation 'com.google.code.gson:gson:2.8.2'
     fullImplementation 'com.google.code.gson:gson:2.8.2'
-    fullImplementation 'com.github.hovig-theo.Print:full:' + project.ext.sdkVersion
 }
 
 afterEvaluate {
@@ -72,17 +71,6 @@ afterEvaluate {
                 artifact("libs/print-release.aar") {
                     classifier "minapi21"
 //                    extension "aar"
-                    pom.withXml {
-                        def dependenciesNode = asNode().appendNode('dependencies')
-
-                        //Iterate over the fullImplementation dependencies, adding a <dependency> node for each
-                        configurations.fullImplementation.allDependencies.each {
-                            def dependencyNode = dependenciesNode.appendNode('dependency')
-                            dependencyNode.appendNode('groupId', it.group)
-                            dependencyNode.appendNode('artifactId', it.name)
-                            dependencyNode.appendNode('version', it.version)
-                        }
-                    }
                 }
                 artifact("libs/print-release.aar") {
                     classifier "androidTV"
@@ -91,6 +79,22 @@ afterEvaluate {
                 artifact("libs/print-release.aar") {
                     classifier "fireTV"
 //                    extension "aar"
+                }
+                pom.withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+
+                    //Iterate over the fullImplementation dependencies, adding a <dependency> node for each
+                    configurations.fullImplementation.allDependencies.each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+
+                    def dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', 'com.github.hovig-theo.Print')
+                    dependencyNode.appendNode('artifactId', 'full')
+                    dependencyNode.appendNode('version', project.ext.sdkVersion)
                 }
             }
         }
