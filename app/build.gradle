@@ -13,10 +13,30 @@ android {
         versionName "1.0"
     }
 
-    flavorDimensions "bundle"
+    flavorDimensions "bundle", "api"
     productFlavors {
-        basic { }
-        full { }
+        basic {
+            dimension "bundle"
+        }
+        full {
+            dimension "bundle"
+        }
+        minapi16 {
+            dimension "api"
+            minSdkVersion 16
+        }
+        minapi21 {
+            dimension "api"
+            minSdkVersion 21
+        }
+        androidTV {
+            dimension "api"
+            minSdkVersion 21
+        }
+        fireTV {
+            dimension "api"
+            minSdkVersion 21
+        }
     }
 }
 
@@ -28,6 +48,7 @@ dependencies {
     fullImplementation 'androidx.mediarouter:mediarouter:1.1.0'
 }
 
+// todo: with classifiers
 //publishing {
 //    publications {
 //        group project.ext.groupId
@@ -97,67 +118,126 @@ dependencies {
 //    }
 //}
 
+// todo: without classifiers
+//publishing {
+//    publications {
+//        group project.ext.groupId
+//        version project.ext.sdkVersion
+//
+//        basic_minapi16(MavenPublication) {
+//            artifactId "basic-minapi16"
+//            artifact("libs/print-release.aar")
+//            pom.withXml {
+//                def dependenciesNode = asNode().appendNode('dependencies')
+//                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
+//                configurations.basicImplementation.allDependencies.each {
+//                    def dependencyNode = dependenciesNode.appendNode('dependency')
+//                    dependencyNode.appendNode('groupId', it.group)
+//                    dependencyNode.appendNode('artifactId', it.name)
+//                    dependencyNode.appendNode('version', it.version)
+//                }
+//            }
+//        }
+//
+//        basic_minapi21(MavenPublication) {
+//            artifactId "basic-minapi21"
+//            artifact("libs/print-release.aar")
+//            pom.withXml {
+//                def dependenciesNode = asNode().appendNode('dependencies')
+//                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
+//                configurations.basicImplementation.allDependencies.each {
+//                    def dependencyNode = dependenciesNode.appendNode('dependency')
+//                    dependencyNode.appendNode('groupId', it.group)
+//                    dependencyNode.appendNode('artifactId', it.name)
+//                    dependencyNode.appendNode('version', it.version)
+//                }
+//            }
+//        }
+//
+//        full_minapi16(MavenPublication) {
+//            artifactId "full-minapi16"
+//            artifact("libs/print-release.aar")
+//            pom.withXml {
+//                def dependenciesNode = asNode().appendNode('dependencies')
+//                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
+//                configurations.fullImplementation.allDependencies.each {
+//                    def dependencyNode = dependenciesNode.appendNode('dependency')
+//                    dependencyNode.appendNode('groupId', it.group)
+//                    dependencyNode.appendNode('artifactId', it.name)
+//                    dependencyNode.appendNode('version', it.version)
+//                }
+//            }
+//        }
+//
+//        full_minapi21(MavenPublication) {
+//            artifactId "full-minapi21"
+//            artifact("libs/print-release.aar")
+//            pom.withXml {
+//                def dependenciesNode = asNode().appendNode('dependencies')
+//                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
+//                configurations.fullImplementation.allDependencies.each {
+//                    def dependencyNode = dependenciesNode.appendNode('dependency')
+//                    dependencyNode.appendNode('groupId', it.group)
+//                    dependencyNode.appendNode('artifactId', it.name)
+//                    dependencyNode.appendNode('version', it.version)
+//                }
+//            }
+//        }
+//    }
+//}
+
+// todo: using flavors
 publishing {
     publications {
+
         group project.ext.groupId
         version project.ext.sdkVersion
 
-        basic_minapi16(MavenPublication) {
-            artifactId "basic-minapi16"
-            artifact("libs/print-release.aar")
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
-                configurations.basicImplementation.allDependencies.each {
-                    def dependencyNode = dependenciesNode.appendNode('dependency')
-                    dependencyNode.appendNode('groupId', it.group)
-                    dependencyNode.appendNode('artifactId', it.name)
-                    dependencyNode.appendNode('version', it.version)
-                }
-            }
-        }
+        // Create different publications for every build types (debug and release)
+        android.variantFilter { variant ->
+            if (variant.buildType.name == "release") {
+                println variant.flavors.name
 
-        basic_minapi21(MavenPublication) {
-            artifactId "basic-minapi21"
-            artifact("libs/print-release.aar")
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
-                configurations.basicImplementation.allDependencies.each {
-                    def dependencyNode = dependenciesNode.appendNode('dependency')
-                    dependencyNode.appendNode('groupId', it.group)
-                    dependencyNode.appendNode('artifactId', it.name)
-                    dependencyNode.appendNode('version', it.version)
-                }
-            }
-        }
+                // Dynamically creating publications name
+                "${variant.name}Aar"(MavenPublication) {
+                    artifactId "${variant.flavors.name[0]}-${variant.flavors.name[1]}"
+                    artifact("libs/print-release.aar")
+//                    artifact("libs/${project.ext.sdkName}-${project.ext.license}-${project.ext.sdkVersion}-${variant.flavors.name[0]}-${variant.flavors.name[1]}-release.aar")
+//                    println "libs/${project.ext.sdkName}-${project.ext.license}-${project.ext.sdkVersion}-${variant.flavors.name[0]}-${variant.flavors.name[1]}-release.aar"
 
-        full_minapi16(MavenPublication) {
-            artifactId "full-minapi16"
-            artifact("libs/print-release.aar")
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
-                configurations.fullImplementation.allDependencies.each {
-                    def dependencyNode = dependenciesNode.appendNode('dependency')
-                    dependencyNode.appendNode('groupId', it.group)
-                    dependencyNode.appendNode('artifactId', it.name)
-                    dependencyNode.appendNode('version', it.version)
-                }
-            }
-        }
+//                def manifest = new XmlSlurper().parse(project.android.sourceSets.main.manifest.srcFile);
+//                def libVersion = manifest['@android:versionName'].text()
+//                def artifactName = project.getName()
 
-        full_minapi21(MavenPublication) {
-            artifactId "full-minapi21"
-            artifact("libs/print-release.aar")
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
-                configurations.fullImplementation.allDependencies.each {
-                    def dependencyNode = dependenciesNode.appendNode('dependency')
-                    dependencyNode.appendNode('groupId', it.group)
-                    dependencyNode.appendNode('artifactId', it.name)
-                    dependencyNode.appendNode('version', it.version)
+                    def flavorName = variant.flavors.name[0]
+                    pom.withXml {
+                        def configurationName = "${flavorName}Implementation"
+
+                        //Creating additional node for dependencies
+                        def dependenciesNode = asNode().appendNode('dependencies')
+                        //Iterate over the {configurationName} dependencies, adding a <dependency> node for each
+                        configurations[configurationName].allDependencies.each {
+                            if (it.group != null && it.name != null) {
+                                println "${configurationName} - adding dependency: ${it.group}:${it.name}:${it.version}"
+
+                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                dependencyNode.appendNode('groupId', it.group)
+                                dependencyNode.appendNode('artifactId', it.name)
+                                dependencyNode.appendNode('version', it.version)
+
+                                //If there are any exclusions in dependency
+                                if (it.excludeRules.size() > 0) {
+                                    def exclusionsNode = dependencyNode.appendNode('exclusions')
+                                    it.excludeRules.each { rule ->
+                                        def exclusionNode = exclusionsNode.appendNode('exclusion')
+                                        exclusionNode.appendNode('groupId', rule.group)
+                                        exclusionNode.appendNode('artifactId', rule.module)
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
         }
