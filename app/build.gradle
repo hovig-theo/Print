@@ -66,30 +66,30 @@ afterEvaluate {
                 artifactId "full"
                 artifact("libs/print-release.aar") {
                     classifier "minapi16"
-                    extension "aar"
+//                    extension "aar"
                 }
                 artifact("libs/print-release.aar") {
                     classifier "minapi21"
-                    extension "aar"
+//                    extension "aar"
+                    pom.withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+
+                        //Iterate over the fullImplementation dependencies, adding a <dependency> node for each
+                        configurations.fullImplementation.allDependencies.each {
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', it.group)
+                            dependencyNode.appendNode('artifactId', it.name)
+                            dependencyNode.appendNode('version', it.version)
+                        }
+                    }
                 }
                 artifact("libs/print-release.aar") {
                     classifier "androidTV"
-                    extension "aar"
+//                    extension "aar"
                 }
                 artifact("libs/print-release.aar") {
                     classifier "fireTV"
-                    extension "aar"
-                }
-                pom.withXml {
-                    def dependenciesNode = asNode().appendNode('dependencies')
-
-                    //Iterate over the fullImplementation dependencies, adding a <dependency> node for each
-                    configurations.fullImplementation.allDependencies.each {
-                        def dependencyNode = dependenciesNode.appendNode('dependency')
-                        dependencyNode.appendNode('groupId', it.group)
-                        dependencyNode.appendNode('artifactId', it.name)
-                        dependencyNode.appendNode('version', it.version)
-                    }
+//                    extension "aar"
                 }
             }
         }
