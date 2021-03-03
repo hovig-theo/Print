@@ -23,6 +23,7 @@ android {
 dependencies {
     basicImplementation 'com.google.code.gson:gson:2.8.2'
     fullImplementation 'com.google.code.gson:gson:2.8.2'
+    fullImplementation 'com.github.hovig-theo.Print:full:' + project.ext.sdkVersion
 }
 
 afterEvaluate {
