@@ -15,36 +15,10 @@ android {
 
 }
 
-//publishing {
-//    publications {
-//        group "com.test.print"
-//        version = "1.0.14"
-//
-//        minapi16(MavenPublication) {
-//            artifactId "minapi16"
-//            artifact("libs/print-release.aar") {
-//                classifier "basic"
-//                extension "aar"
-//            }
-//        }
-//
-//        minapi21(MavenPublication) {
-//            artifactId "minapi21"
-//            artifact("libs/print-release.aar") {
-//                classifier "basic"
-//                extension "aar"
-//            }
-//        }
-//    }
-//}
-//implementation 'com.github.hovig-theo.Print:minapi16:1.0.14:basic@aar'
-//implementation 'com.github.hovig-theo.Print:minapi21:1.0.14:basic@aar'
-
-
 publishing {
     publications {
-        group "com.test.print"
-        version = "1.0.17"
+        group project.ext.groupId
+        version project.ext.sdkVersion
 
         minapi16(MavenPublication) {
             artifactId "minapi16"
@@ -69,5 +43,30 @@ publishing {
                 extension "aar"
             }
         }
+
+        androidTV(MavenPublication) {
+            artifactId "minapi21"
+            artifact("libs/print-release.aar") {
+                classifier "basic"
+                extension "aar"
+            }
+            artifact("libs/print-release.aar") {
+                classifier "full"
+                extension "aar"
+            }
+        }
+
+        fireTV(MavenPublication) {
+            artifactId "minapi21"
+            artifact("libs/print-release.aar") {
+                classifier "basic"
+                extension "aar"
+            }
+            artifact("libs/print-release.aar") {
+                classifier "full"
+                extension "aar"
+            }
+        }
+
     }
 }
