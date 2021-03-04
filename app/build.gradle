@@ -3,7 +3,7 @@ apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.test.uploader"
@@ -48,173 +48,34 @@ dependencies {
     fullImplementation 'androidx.mediarouter:mediarouter:1.1.0'
 }
 
-// todo: with classifiers
-//publishing {
-//    publications {
-//        group project.ext.groupId
-//        version project.ext.sdkVersion
-//
-//        basic(MavenPublication) {
-//            artifactId "basic"
-//            artifact("libs/print-release.aar") {
-//                classifier "minapi16"
-//                extension "aar"
-//            }
-//            artifact("libs/print-release.aar") {
-//                classifier "minapi21"
-//                extension "aar"
-//            }
-//            artifact("libs/print-release.aar") {
-//                classifier "androidTV"
-//                extension "aar"
-//            }
-//            artifact("libs/print-release.aar") {
-//                classifier "fireTV"
-//                extension "aar"
-//            }
-//            pom.withXml {
-//                def dependenciesNode = asNode().appendNode('dependencies')
-//
-//                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
-//                configurations.basicImplementation.allDependencies.each {
-//                    def dependencyNode = dependenciesNode.appendNode('dependency')
-//                    dependencyNode.appendNode('groupId', it.group)
-//                    dependencyNode.appendNode('artifactId', it.name)
-//                    dependencyNode.appendNode('version', it.version)
-//                }
-//            }
-//        }
-//
-//        full(MavenPublication) {
-//            artifactId "full"
-//            artifact("libs/print-release.aar") {
-//                classifier "minapi16"
-////                    extension "aar"
-//            }
-//            artifact("libs/print-release.aar") {
-//                classifier "minapi21"
-////                    extension "aar"
-//            }
-//            artifact("libs/print-release.aar") {
-//                classifier "androidTV"
-////                    extension "aar"
-//            }
-//            artifact("libs/print-release.aar") {
-//                classifier "fireTV"
-////                    extension "aar"
-//            }
-//            pom.withXml {
-//                def dependenciesNode = asNode().appendNode('dependencies')
-//
-//                //Iterate over the fullImplementation dependencies, adding a <dependency> node for each
-//                configurations.fullImplementation.allDependencies.each {
-//                    def dependencyNode = dependenciesNode.appendNode('dependency')
-//                    dependencyNode.appendNode('groupId', it.group)
-//                    dependencyNode.appendNode('artifactId', it.name)
-//                    dependencyNode.appendNode('version', it.version)
-//                }
-//            }
-//        }
-//    }
-//}
-
-// todo: without classifiers
-//publishing {
-//    publications {
-//        group project.ext.groupId
-//        version project.ext.sdkVersion
-//
-//        basic_minapi16(MavenPublication) {
-//            artifactId "basic-minapi16"
-//            artifact("libs/print-release.aar")
-//            pom.withXml {
-//                def dependenciesNode = asNode().appendNode('dependencies')
-//                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
-//                configurations.basicImplementation.allDependencies.each {
-//                    def dependencyNode = dependenciesNode.appendNode('dependency')
-//                    dependencyNode.appendNode('groupId', it.group)
-//                    dependencyNode.appendNode('artifactId', it.name)
-//                    dependencyNode.appendNode('version', it.version)
-//                }
-//            }
-//        }
-//
-//        basic_minapi21(MavenPublication) {
-//            artifactId "basic-minapi21"
-//            artifact("libs/print-release.aar")
-//            pom.withXml {
-//                def dependenciesNode = asNode().appendNode('dependencies')
-//                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
-//                configurations.basicImplementation.allDependencies.each {
-//                    def dependencyNode = dependenciesNode.appendNode('dependency')
-//                    dependencyNode.appendNode('groupId', it.group)
-//                    dependencyNode.appendNode('artifactId', it.name)
-//                    dependencyNode.appendNode('version', it.version)
-//                }
-//            }
-//        }
-//
-//        full_minapi16(MavenPublication) {
-//            artifactId "full-minapi16"
-//            artifact("libs/print-release.aar")
-//            pom.withXml {
-//                def dependenciesNode = asNode().appendNode('dependencies')
-//                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
-//                configurations.fullImplementation.allDependencies.each {
-//                    def dependencyNode = dependenciesNode.appendNode('dependency')
-//                    dependencyNode.appendNode('groupId', it.group)
-//                    dependencyNode.appendNode('artifactId', it.name)
-//                    dependencyNode.appendNode('version', it.version)
-//                }
-//            }
-//        }
-//
-//        full_minapi21(MavenPublication) {
-//            artifactId "full-minapi21"
-//            artifact("libs/print-release.aar")
-//            pom.withXml {
-//                def dependenciesNode = asNode().appendNode('dependencies')
-//                //Iterate over the basicImplementation dependencies, adding a <dependency> node for each
-//                configurations.fullImplementation.allDependencies.each {
-//                    def dependencyNode = dependenciesNode.appendNode('dependency')
-//                    dependencyNode.appendNode('groupId', it.group)
-//                    dependencyNode.appendNode('artifactId', it.name)
-//                    dependencyNode.appendNode('version', it.version)
-//                }
-//            }
-//        }
-//    }
-//}
-
-// todo: using flavors
 publishing {
     publications {
 
         group project.ext.groupId
         version project.ext.sdkVersion
 
-        // Create different publications for every build types (debug and release)
+        // Create different publications for every flavor
         android.variantFilter { variant ->
             if (variant.buildType.name == "release") {
                 println variant.flavors.name
 
                 // Dynamically creating publications name
-                "${variant.name}Aar"(MavenPublication) {
+                "${variant.name}"(MavenPublication) {
                     artifactId "${variant.flavors.name[0]}-${variant.flavors.name[1]}"
                     artifact("libs/print-release.aar")
 //                    artifact("libs/${project.ext.sdkName}-${project.ext.license}-${project.ext.sdkVersion}-${variant.flavors.name[0]}-${variant.flavors.name[1]}-release.aar")
 //                    println "libs/${project.ext.sdkName}-${project.ext.license}-${project.ext.sdkVersion}-${variant.flavors.name[0]}-${variant.flavors.name[1]}-release.aar"
 
-//                def manifest = new XmlSlurper().parse(project.android.sourceSets.main.manifest.srcFile);
-//                def libVersion = manifest['@android:versionName'].text()
-//                def artifactName = project.getName()
-
+                    // generating pom file for each publication is in a separate task named (generatePomFileFor[variant.name]Publication)
+                    // that's why we need to define the flavorName below outside of pom.withXml{},
+                    // otherwise variant.flavors.name[0] will always point to the latest variant from variantFilter iteration
                     def flavorName = variant.flavors.name[0]
                     pom.withXml {
                         def configurationName = "${flavorName}Implementation"
 
                         //Creating additional node for dependencies
                         def dependenciesNode = asNode().appendNode('dependencies')
+
                         //Iterate over the {configurationName} dependencies, adding a <dependency> node for each
                         configurations[configurationName].allDependencies.each {
                             if (it.group != null && it.name != null) {
