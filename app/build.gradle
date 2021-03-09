@@ -18,6 +18,9 @@ android {
         basic {
             dimension "bundle"
         }
+        extended {
+            dimension "bundle"
+        }
         full {
             dimension "bundle"
         }
@@ -63,8 +66,8 @@ publishing {
                 "${variant.name}"(MavenPublication) {
                     artifactId "${variant.flavors.name[0]}-${variant.flavors.name[1]}"
                     artifact("libs/print-release.aar")
-//                    artifact("libs/${project.ext.sdkName}-${project.ext.license}-${project.ext.sdkVersion}-${variant.flavors.name[0]}-${variant.flavors.name[1]}-release.aar")
-//                    println "libs/${project.ext.sdkName}-${project.ext.license}-${project.ext.sdkVersion}-${variant.flavors.name[0]}-${variant.flavors.name[1]}-release.aar"
+//                    artifact("libs/${project.ext.sdkName}-${variant.flavors.name[0]}-${project.ext.sdkVersion}-${variant.flavors.name[1]}-release.aar")
+                    println "libs/${project.ext.sdkName}-${variant.flavors.name[0]}-${project.ext.sdkVersion}-${variant.flavors.name[1]}-release.aar"
 
                     // generating pom file for each publication is in a separate task named (generatePomFileFor[variant.name]Publication)
                     // that's why we need to define the flavorName below outside of pom.withXml{},
