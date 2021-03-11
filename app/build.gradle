@@ -46,7 +46,13 @@ android {
 dependencies {
     basicImplementation 'com.google.code.gson:gson:2.8.2'
 
+    extendedImplementation 'com.google.code.gson:gson:2.8.2'
+    extendedImplementation 'com.google.android.gms:play-services-ads-identifier:16.0.0'
+    extendedImplementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.18.1'
+
     fullImplementation 'com.google.code.gson:gson:2.8.2'
+    fullImplementation 'com.google.android.gms:play-services-ads-identifier:16.0.0'
+    fullImplementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.18.1'
     fullImplementation 'com.google.android.gms:play-services-cast-framework:16.2.0'
     fullImplementation 'androidx.mediarouter:mediarouter:1.1.0'
 }
@@ -64,17 +70,15 @@ publishing {
 
                 // Dynamically creating publications name
                 "${variant.name}"(MavenPublication) {
-                    artifactId "${variant.flavors.name[0]}-${variant.flavors.name[1]}"
+                    def bundleFlavor = variant.flavors.name[0]
+                    def apiFlavor = variant.flavors.name[1]
+                    artifactId "${bundleFlavor}-${apiFlavor}"
                     artifact("libs/print-release.aar")
-//                    artifact("libs/${project.ext.sdkName}-${variant.flavors.name[0]}-${project.ext.sdkVersion}-${variant.flavors.name[1]}-release.aar")
-                    println "libs/${project.ext.sdkName}-${variant.flavors.name[0]}-${project.ext.sdkVersion}-${variant.flavors.name[1]}-release.aar"
+//                    artifact("libs/${project.ext.sdkName}-${bundleFlavor}-${project.ext.sdkVersion}-${apiFlavor}-release.aar")
+                    println "libs/${project.ext.sdkName}-${bundleFlavor}-${project.ext.sdkVersion}-${apiFlavor}-release.aar"
 
-                    // generating pom file for each publication is in a separate task named (generatePomFileFor[variant.name]Publication)
-                    // that's why we need to define the flavorName below outside of pom.withXml{},
-                    // otherwise variant.flavors.name[0] will always point to the latest variant from variantFilter iteration
-                    def flavorName = variant.flavors.name[0]
                     pom.withXml {
-                        def configurationName = "${flavorName}Implementation"
+                        def configurationName = "${bundleFlavor}Implementation"
 
                         //Creating additional node for dependencies
                         def dependenciesNode = asNode().appendNode('dependencies')
